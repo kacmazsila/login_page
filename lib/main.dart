@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const MyApp());
@@ -42,6 +43,25 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   TextEditingController txtUserName = TextEditingController();
   TextEditingController txtPassword = TextEditingController();
+  var sharedPref = null;
+  bool isRemember = false;
+
+  @override
+  void initState() {
+    super.initState();
+    prepareSharedInstance();
+  }
+
+  Future<void> prepareSharedInstance() async {
+    sharedPref = await SharedPreferences.getInstance();
+    setState(() {
+      isRemember = sharedPref.getBool("remember") ?? false;
+      if (isRemember) {
+        txtUserName.text = sharedPref.getString("username") ?? "";
+        txtPassword.text = sharedPref.getString("pass") ?? "";
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +115,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 controlAffinity: ListTileControlAffinity.leading,
                 activeColor: Colors.green,
                 onChanged: (newValue) {
-                  setState(() {});
+                  setState(() {
+                    isRemember = newValue!;
+                    sharedPref.setBool("remember", newValue);
+                  });
                 },
                 title: const Text(
                   "Remember me",
@@ -109,12 +132,21 @@ class _MyHomePageState extends State<MyHomePage> {
               padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
               child: ElevatedButton(
                 child: Text('Login'),
-                onPressed: () {},
+                onPressed: () {
+                  login();
+                },
               ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  login() {
+    if (isRemember) {
+      sharedPref.setString("username", txtUserName.text.toString());
+      sharedPref.setString("pass", txtPassword.text.toString());
+    }
   }
 }
