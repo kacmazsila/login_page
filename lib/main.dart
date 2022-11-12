@@ -66,6 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             Container(
+              padding: const EdgeInsets.fromLTRB(30, 10, 20, 30),
               alignment: Alignment.center,
               child: TextField(
                 controller: txtUserName,
@@ -76,6 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             Container(
+              padding: const EdgeInsets.fromLTRB(30, 5, 20, 30),
               alignment: Alignment.center,
               child: TextField(
                 obscureText: true,
@@ -87,21 +89,27 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             Container(
-              height: 50,
-              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-              child: ElevatedButton(
-                child: Text('Login'),
-                onPressed: () {},
-              ),
-            ),
-            Container(
-              child: Checkbox(
+              alignment: Alignment.bottomLeft,
+              padding: const EdgeInsets.only(left: 20),
+              child: CheckboxListTile(
+                controlAffinity: ListTileControlAffinity.leading,
                 activeColor: Colors.green,
                 onChanged: (newValue) {
                   setState(() {});
-                  const Text("Remember me");
                 },
+                title: const Text(
+                  "Remember me",
+                  style: TextStyle(color: Colors.black),
+                ),
                 value: false,
+              ),
+            ),
+            Container(
+              height: 50,
+              padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+              child: ElevatedButton(
+                child: Text('Login'),
+                onPressed: () {},
               ),
             ),
           ],
